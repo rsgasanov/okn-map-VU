@@ -3,9 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Фотокарта</title>
+  <title>Фотокарта ОКН ВУ</title>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-o9N1j7kPsoxkE8n9yKqD7IVlY2v6U8p0pQYf3Zi1P3s="
+    crossorigin=""
+  />
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-o9N1j7kPsoxkE8n9yKqD7IVlY2v6U8p0pQYf3Zi1P3s="
+    crossorigin=""
+  ></script>
   <style>
-    html, body, #map { height: 100%; margin: 0; padding: 0; }
+    html, body, #map {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
     .photo-marker {
       width: 100px;
       height: 100px;
@@ -15,13 +31,13 @@
       box-shadow: 0 0 5px rgba(0,0,0,0.5);
       transform: translate(-50%, -100%);
     }
+
     .photo-marker img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
   </style>
-  <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full"></script>
 </head>
 <body>
   <div id="map"></div>
@@ -29,24 +45,28 @@
     fetch('points.geojson')
       .then(r => r.json())
       .then(data => {
-        DG.then(() => {
-          const map = DG.map('map', {
-            center: [55.75, 37.62],
-            zoom: 5
+        const map = L.map('map').setView([55.75, 37.62], 5);
+
+        // Подложка OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Добавляем фото-маркеры
+        data.features.forEach(f => {
+          const coords = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
+          const photo = f.properties.photo;
+          const name = f.properties.name;
+
+          const icon = L.divIcon({
+            className: 'photo-marker',
+            html: `<img src="${photo}" alt="${name}" title="${name}">`,
+            iconSize: [100, 100],
+            iconAnchor: [50, 100]
           });
 
-          data.features.forEach(f => {
-            const coords = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
-            const photo = f.properties.photo;
-            const name = f.properties.name;
-
-            const icon = DG.divIcon({
-              className: 'photo-marker',
-              html: `<img src="${photo}" alt="${name}" title="${name}">`
-            });
-
-            DG.marker(coords, { icon }).addTo(map);
-          });
+          L.marker(coords, { icon }).addTo(map);
         });
       })
       .catch(err => console.error('Ошибка загрузки GeoJSON:', err));
