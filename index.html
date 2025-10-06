@@ -47,7 +47,7 @@
               html: `<img src="${photo}" alt="${name}" title="${name}">`
             });
 
-            DG.marker(coords).addTo(map);
+            DG.marker(coords, { icon }).addTo(map);;
               // .bindPopup(`<div class="popup"><strong>${name}</strong><br><img src="${photo}"></div>`);
           });
         });
