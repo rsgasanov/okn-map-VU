@@ -5,7 +5,7 @@
       "type": "Feature",
       "properties": {
         "name": "Памятник",
-        "photo": "photos/photo1.heic"
+        "photo": "photos/photo1.jpg"
       },
       "geometry": {
         "type": "Point",
@@ -16,7 +16,7 @@
       "type": "Feature",
       "properties": {
         "name": "Музей",
-        "photo": "photos/photo2.heic"
+        "photo": "photos/photo2.jpg"
       },
       "geometry": {
         "type": "Point",
