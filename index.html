@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Карта ОКН ВУ</title>
+  <title>Фотокарта</title>
   <style>
     html, body, #map { height: 100%; margin: 0; padding: 0; }
     .photo-marker {
@@ -40,13 +40,11 @@
             const photo = f.properties.photo;
             const name = f.properties.name;
 
-            // создаём div-иконку с фотографией
             const icon = DG.divIcon({
               className: 'photo-marker',
               html: `<img src="${photo}" alt="${name}" title="${name}">`
             });
 
-            // добавляем маркер С ИКОНКОЙ
             DG.marker(coords, { icon }).addTo(map);
           });
         });
