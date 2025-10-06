@@ -3,21 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Фотокарта ОКН ВУ</title>
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-  ></script>
+  <title>Карта ОКН ВУ</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
-    html, body, #map {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-
+    html, body, #map { height: 100%; margin: 0; padding: 0; }
     .photo-marker {
       width: 100px;
       height: 100px;
@@ -25,9 +14,8 @@
       overflow: hidden;
       border: 2px solid white;
       box-shadow: 0 0 5px rgba(0,0,0,0.5);
-      transform: translate(-50%, -100%);
+      transform: translate(-50%, -100%); /* чтобы центр совпадал с координатой */
     }
-
     .photo-marker img {
       width: 100%;
       height: 100%;
@@ -37,24 +25,27 @@
 </head>
 <body>
   <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
+    // Создаём карту
+    const map = L.map('map').setView([55.7558, 37.6173], 12);
+
+    // Подложка OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Загружаем GeoJSON с точками
     fetch('points.geojson')
       .then(r => r.json())
       .then(data => {
-        const map = L.map('map').setView([55.75, 37.62], 5);
-
-        // Подложка OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 19,
-          attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-        // Добавляем фото-маркеры
         data.features.forEach(f => {
           const coords = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
           const photo = f.properties.photo;
           const name = f.properties.name;
 
+          // создаём div-иконку с фото
           const icon = L.divIcon({
             className: 'photo-marker',
             html: `<img src="${photo}" alt="${name}" title="${name}">`,
@@ -62,6 +53,7 @@
             iconAnchor: [50, 100]
           });
 
+          // маркер с иконкой
           L.marker(coords, { icon }).addTo(map);
         });
       })
