@@ -1,0 +1,27 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Памятник",
+        "photo": "photos/photo1.heic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [37.6173, 55.7558]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Музей",
+        "photo": "photos/photo2.heic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [37.605, 55.753]
+      }
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Моя карта</title>
+  <style>
+    html, body, #map { height: 100%; margin: 0; padding: 0; }
+    .popup img { width: 200px; border-radius: 8px; }
+  </style>
+  <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full"></script>
+</head>
+<body>
+  <div id="map"></div>
+  <script>
+    fetch('points.geojson')
+      .then(r => r.json())
+      .then(data => {
+        DG.then(() => {
+          const map = DG.map('map', {
+            center: [55.75, 37.62],
+            zoom: 10
+          });
+
+          data.features.forEach(f => {
+            const coords = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
+            const photo = f.properties.photo;
+            const name = f.properties.name;
+            DG.marker(coords).addTo(map)
+              .bindPopup(`<div class="popup"><strong>${name}</strong><br><img src="${photo}"></div>`);
+          });
+        });
+      })
+      .catch(err => console.error('Ошибка загрузки GeoJSON:', err));
+  </script>
+</body>
+</html>
