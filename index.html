@@ -63,7 +63,7 @@
       .catch(err => console.error('Ошибка загрузки photos.geojson:', err));
 
     // Загружаем точки ОКН
-    fetch('okn_pnt_utm.geojson')
+    fetch('okn_pnt_filtered.geojson')
       .then(r => r.json())
       .then(data => {
         data.features.forEach(f => {
@@ -75,7 +75,7 @@
             .addTo(oknLayer);
         });
       })
-      .catch(err => console.error('Ошибка загрузки okn_pnt_utm.geojson:', err));
+      .catch(err => console.error('Ошибка загрузки oknokn_pnt_filtered_pnt_utm.geojson:', err));
 
     // Панель слоёв
     L.control.layers({
